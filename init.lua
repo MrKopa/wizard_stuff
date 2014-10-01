@@ -1,5 +1,5 @@
 --author:MrKopa
---version:30-09-14/DD-MM-YY
+--version:01-10-14/DD-MM-YY
 --name : wizard_stuff
 
 -------------------------------------------------------------
@@ -38,6 +38,16 @@ minetest.register_node("wizard_stuff:yellonium_ore",{
   groups = {cracky=3,stone=1},
   drop = "wizard_stuff:yellonium_shard",
   legacy_mineral = true,
+  })
+
+minetest.register_node("wizard_stuff:infused_wood",{
+  tiles = { "infused_wood_default.png" },
+  inventory_image = minetest.inventorycube("infused_wood_default.png"),
+  description = "Infused Wood",
+  light_source = LIGHT_MAX,
+  is_ground_content = false,
+  groups = {choppy = 2,oddly_breakable_by_hand = 2, wood = 1},
+  sounds = default.node_sound_wood_defaults(),
   })
 
 -------------------------------------------------------------
@@ -151,7 +161,7 @@ on_use = function(itemstack,user, pointed_thing)
                                 end
                                 wear = wear+3
                               itemstack:add_wear(wear)
-                              minetest.env:dig_node({x=xi,y=yi,z=zi})
+                              minetest.env:remove_node({x=xi,y=yi,z=zi})
 
                              else
                                minetest.chat_send_player(user:get_player_name(),"Inventory full!")
@@ -180,7 +190,19 @@ minetest.register_craft({
             output = 'wizard_stuff:star_staff 1',
             recipe = {
                {'default:gold_ingot','wizard_stuff:shard_star' ,'default:gold_ingot'},
-               { 'default:gold_block','default:tree','default:gold_block'},
+               { 'default:goldblock','default:tree','default:goldblock'},
                {'','default:stick',''},
             }
             })
+
+minetest.register_craft({
+    output = "wizard_stuff:infused_wood 4",
+    recipe = {
+          {'','default:wood',''},
+          {'default:wood','default:gold_ingot','default:wood'},
+          {'','default:wood',''}
+  },
+    replacements = {
+      {"default:wood","default:junglewood"}
+  }
+  })
