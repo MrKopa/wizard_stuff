@@ -1,5 +1,5 @@
 --author:MrKopa
---version:01-10-14/DD-MM-YY
+--version:02-10-14/DD-MM-YY
 --name : wizard_stuff
 
 -------------------------------------------------------------
@@ -50,8 +50,32 @@ minetest.register_node("wizard_stuff:infused_wood",{
   sounds = default.node_sound_wood_defaults(),
   })
 
+minetest.register_node("wizard_stuff:primordial_node",{
+  tiles = {"primordial_node.png"},
+  description = "Primordial Node",
+  is_ground_content = false,
+  paramtype2 = "facedir",
+  groups = {cracky = 1,puts_out_fire = 1},
+
+  on_place = function(itemstack,placer,pointed_thing)
+    if pointed_thing.under then
+          local pp = pointed_thing.under
+          local node_under = minetest.env:get_node({x=pp.x,y=pp.y,z=pp.z})
+
+          minetest.chat_send_player(placer:get_player_name(),"The node under is  "..node_under.name)
+          if node_under.name ~= "default:tree" then
+                 minetest.env:place_node({x=pp.x,y=pp.y+2,z=pp.z},{name=node_under.name})   
+        else
+          
+          minetest.env:place_node({x=pp.x,y=pp.y+2,z=pp.z},{name=node_under.name})
+          minetest.rotate_node(itemstack,placer,pointed_thing) 
+          end      
+    end
+  end,
+  })
+
 -------------------------------------------------------------
---ore register
+--ore register56
 minetest.register_ore({
   ore_type = "scatter",
   ore      = "wizard_stuff:bluminium_ore",
@@ -149,15 +173,17 @@ on_use = function(itemstack,user, pointed_thing)
                     for zi = p.z-1, p.z+1 do
                       for yi = p.y-1, p.y+1 do
                         for xi = p.x-1, p.x+1 do
-                         local thisNode = minetest.env:get_node({x=xi,y=yi,z=zi})
+                         local this_node = minetest.env:get_node({x=xi,y=yi,z=zi})
                          local inv = user:get_inventory()
                           
-                          if inv:room_for_item("main",{name = thisNode.name}) and thisNode.name ~= "ignore" and thisNode.name ~= "default:water_source" 
-                                                                                                       and thisNode.name ~= "default:water_flowing" then
+                          if inv:room_for_item("main",{name = this_node.name}) and this_node.name ~= "ignore" and this_node.name ~= "default:water_source" 
+                                                                                                       and this_node.name ~= "default:water_flowing" 
+                                                                                                       and this_node.name ~= "default:chest" 
+                                                                                                       and this_node.name ~= "default:chest_locked" then
 
-                                if thisNode.name ~= "air" then
-                                      inv:add_item("main",{name=thisNode.name})
-                                      minetest.chat_send_player(user:get_player_name(),"You got a "..thisNode.name)
+                                if this_node.name ~= "air" then
+                                      inv:add_item("main",{name=this_node.name})
+                                      minetest.chat_send_player(user:get_player_name(),"You got a "..this_node.name)
                                 end
                                 wear = wear+3
                               itemstack:add_wear(wear)
@@ -205,4 +231,10 @@ minetest.register_craft({
     replacements = {
       {"default:wood","default:junglewood"}
   }
+  })
+
+minetest.register_craft({
+  output = "wizard_stuff:primordial_node 2",
+  type = "shapeless",
+  recipe = {"wizard_stuff:bluminium_shard","wizard_stuff:redunium_shard","wizard_stuff:greenium_shard","wizard_stuff:yellonium_shard","default:dirt"},
   })
