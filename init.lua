@@ -207,7 +207,7 @@ minetest.register_craft({
             output = 'wizard_stuff:shard_star 1',
             recipe = {
                {'','wizard_stuff:bluminium_shard' ,''},
-               { 'wizard_stuff:redunium_shard','default:gold_block','wizard_stuff:greenium_shard'},
+               { 'wizard_stuff:redunium_shard','default:goldblock','wizard_stuff:greenium_shard'},
                {'','wizard_stuff:yellonium_shard',''},
             }
             }) 
