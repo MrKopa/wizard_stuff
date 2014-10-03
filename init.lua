@@ -1,5 +1,5 @@
 --author:MrKopa
---version:02-10-14/DD-MM-YY
+--version:03-10-14/DD-MM-YY
 --name : wizard_stuff
 
 -------------------------------------------------------------
@@ -54,6 +54,7 @@ minetest.register_node("wizard_stuff:primordial_node",{
   tiles = {"primordial_node.png"},
   description = "Primordial Node",
   is_ground_content = false,
+  buildable_to = true,
   paramtype2 = "facedir",
   groups = {cracky = 1,puts_out_fire = 1},
 
@@ -61,15 +62,12 @@ minetest.register_node("wizard_stuff:primordial_node",{
     if pointed_thing.under then
           local pp = pointed_thing.under
           local node_under = minetest.env:get_node({x=pp.x,y=pp.y,z=pp.z})
+          local fdir = minetest.dir_to_facedir(placer:get_look_dir())
 
-          minetest.chat_send_player(placer:get_player_name(),"The node under is  "..node_under.name)
-          if node_under.name ~= "default:tree" then
-                 minetest.env:place_node({x=pp.x,y=pp.y+2,z=pp.z},{name=node_under.name})   
-        else
+          minetest.chat_send_player(placer:get_player_name(),"The node under is  "..node_under.name.."and facedir is : "..fdir)
           
-          minetest.env:place_node({x=pp.x,y=pp.y+2,z=pp.z},{name=node_under.name})
-          minetest.rotate_node(itemstack,placer,pointed_thing) 
-          end      
+          minetest.env:set_node({x=pp.x,y=pp.y+1,z=pp.z},{name=node_under.name,param2=fdir})
+    
     end
   end,
   })
